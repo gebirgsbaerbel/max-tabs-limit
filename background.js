@@ -46,17 +46,46 @@ function updateBadge(length) {
 }
 
 /*
-Generic error logger.
+Generic error logger. Called when number of maxTabs could not be retrieved for any reason.
+Instead then use default value.
 */
 function onError(e) {
   console.error(e);
+  setMaxTabsDefaultValue();
+}
+
+/*
+  Called when saving maxTabs value was not successfull.
+*/
+function onSaveError(e) {
+  console.error(e);
+}
+
+/*
+  Log message in case storing settings has been successfull.
+*/
+function savedSuccessfully(e) {
+  console.log(`Saved successfully: ${e}`);
 }
 
 /*
 Retrieved information of maxTabs setting from storage.
 */
 function retrievedMaxTabs(value) {
-  maxTabs = value.maxTabs;
+  // If maxTabs value is set use it, otherwise use default value.
+  if (value.maxTabs) {
+    maxTabs = value.maxTabs;
+  } else {
+    setMaxTabsDefaultValue();
+  }
+}
+
+function setMaxTabsDefaultValue() {
+  maxTabsDefault = 50;
+  maxTabs = maxTabsDefault;
+  browser.storage.local.set({
+    "maxTabs": maxTabsDefault
+  }).then(savedSuccessfully, onSaveError);
 }
 
 /*
