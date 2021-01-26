@@ -21,7 +21,7 @@
         "32": "bookmark.svg"
     }
   },
-  "version": "1.0",
+  "version": "1.1",
   "browser_specific_settings": {
     "gecko": {
       "strict_min_version": "57.0a1",

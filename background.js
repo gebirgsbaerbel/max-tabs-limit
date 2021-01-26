@@ -15,10 +15,9 @@ function updateCount(tabId, isOnRemoved) {
     if (isOnRemoved && tabId && tabs.map((t) => { return t.id; }).includes(tabId)) {
       length--;
     }
-
-    updateBadge(length);
-
-    if (!isOnRemoved && length > maxTabs) {
+    // Only limit number of tabs other than preferences
+    isPreferencesWindow = tabId.title.includes("about:preferences") || tabId.title.includes("about:addons") || tabId.title.includes("about:logins");
+    if (!isOnRemoved && length > maxTabs && !isPreferencesWindow) {
       let content = `Max Tabs: ${maxTabs}    Current Tabs: ${length}`;
       browser.notifications.create({
         "type": "basic",
@@ -28,6 +27,9 @@ function updateCount(tabId, isOnRemoved) {
       });
       browser.tabs.remove(tabId.id);
     }
+
+    updateBadge(length);
+
   });
 }
 
