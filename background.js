@@ -16,8 +16,8 @@ function updateCount(tabId, isOnRemoved) {
       length--;
     }
     // Only limit number of tabs other than preferences
-    isPreferencesWindow = tabId.title.includes("about:preferences") || tabId.title.includes("about:addons") || tabId.title.includes("about:logins");
-    if (!isOnRemoved && length > maxTabs && !isPreferencesWindow) {
+    isPreferencesWindow = tabId.title == null || tabId.title.includes("about:preferences") || tabId.title.includes("about:addons") || tabId.title.includes("about:logins");
+    if (!isOnRemoved && length > maxTabs) {
       let content = `Max Tabs: ${maxTabs}    Current Tabs: ${length}`;
       browser.notifications.create({
         "type": "basic",
