@@ -1,6 +1,6 @@
 {
   "description": "Limit the number of tabs that can be opened",
-  "homepage_url": "https://github.com/mdn/webextensions-examples/tree/master/find-across-tabs",
+  "homepage_url": "https://github.com/gebirgsbaerbel/max-tabs-limit",
   "manifest_version": 2,
   "name": "MaxTabsLimit",
   "permissions": [
@@ -12,20 +12,19 @@
     "scripts": ["background.js"]
   },
   "icons": {
-    "32": "bookmark.svg"
+    "32": "tab.svg"
   },
   "browser_action": {
     "browser_style": true,
     "default_title": "Max Tabs Limit",
     "default_icon": {
-        "32": "bookmark.svg"
+        "32": "tab.svg"
     }
   },
-  "version": "1.2",
+  "version": "1.22",
   "browser_specific_settings": {
     "gecko": {
-      "strict_min_version": "57.0a1",
-      "id": "max@tabs.com"
+      "strict_min_version": "57.0a1"
     }
   },
   "options_ui": {
