@@ -10,6 +10,11 @@ function updateCount(tabId, isOnRemoved) {
   .then((tabs) => {
     let length = tabs.length;
 
+    if (tabId == undefined) {
+      updateBadge(length);
+      return;
+    }
+
     // onRemoved fires too early and the count is one too many.
     // see https://bugzilla.mozilla.org/show_bug.cgi?id=1396758
     if (isOnRemoved && tabId && tabs.map((t) => { return t.id; }).includes(tabId)) {
@@ -20,13 +25,11 @@ function updateCount(tabId, isOnRemoved) {
     isNewTabWindow = tabId.title != null && tabId.title.includes("about:newTab");
     // Do not block any about pages except for newTab. about:home and about:welcome are also blocked as they start an about:newTab page first.
     isBlockable = !isPreferencesWindow || isNewTabWindow;
-    console.log(tabId.title);
-    console.log(isBlockable);
     if (!isOnRemoved && length > maxTabs && isBlockable) {
       let content = `Max Tabs Limit: ${maxTabs}`;
       browser.notifications.create({
         "type": "basic",
-        "iconUrl": browser.extension.getURL("icons/link-48.png"),
+        "iconUrl": browser.runtime.getURL("icons/link-48.png"),
         "title": "Too many tabs opened",
         "message": content
       });
