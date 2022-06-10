@@ -16,8 +16,13 @@ function updateCount(tabId, isOnRemoved) {
       length--;
     }
     // Only limit number of tabs other than preferences
-    isPreferencesWindow = tabId.title == null || tabId.title.includes("about:preferences") || tabId.title.includes("about:addons") || tabId.title.includes("about:logins");
-    if (!isOnRemoved && length > maxTabs && !isPreferencesWindow) {
+    isPreferencesWindow = tabId.title == null || tabId.title.includes("about");
+    isNewTabWindow = tabId.title != null && tabId.title.includes("about:newTab");
+    // Do not block any about pages except for newTab. about:home and about:welcome are also blocked as they start an about:newTab page first.
+    isBlockable = !isPreferencesWindow || isNewTabWindow;
+    console.log(tabId.title);
+    console.log(isBlockable);
+    if (!isOnRemoved && length > maxTabs && isBlockable) {
       let content = `Max Tabs Limit: ${maxTabs}`;
       browser.notifications.create({
         "type": "basic",
