@@ -1,4 +1,7 @@
 var maxTabs;
+// Maps browser tab id to url that should have been loaded instead of Tablist.
+// Allows opening the URL once the user has closed enough tabs.
+var tabURLMap;
 
 /*
 Update the browser when the number of tabs changes.
@@ -18,18 +21,16 @@ function updateCount(tabId, isOnRemoved) {
     // Only limit number of tabs other than preferences
     isPreferencesWindow = tabId.title == null || tabId.title.includes("about:preferences") || tabId.title.includes("about:addons") || tabId.title.includes("about:logins");
     if (!isOnRemoved && length > maxTabs && !isPreferencesWindow) {
-      let content = `Max Tabs Limit: ${maxTabs}`;
-      browser.notifications.create({
-        "type": "basic",
-        "iconUrl": browser.extension.getURL("icons/link-48.png"),
-        "title": "Too many tabs opened",
-        "message": content
-      });
-      browser.tabs.remove(tabId.id);
+      console.log(tabId);
+
+      // Firefox does not set url at this point yet. The url is instead in the title. This changes later on in onUpdate.
+      // TODO: Figure out better way to handle this.
+      tabURLMap.set(tabId.id, tabId.title);
+      storeTabURLMap();
+      console.log(tabId.url);
+      browser.tabs.update(tabId.id, {url: "./overlay.html"}).then(onActivatedOverlay, onError);;
     }
-
     updateBadge(length);
-
   });
 }
 
@@ -102,6 +103,29 @@ function retrieveMaxTabsValue() {
   });
 }
 
+function retrievedTabURLMap(value) {
+  // If value is set use it, otherwise use default value.
+  if (value.tabURLMap) {
+    tabURLMap = new Map(JSON.parse(value.tabURLMap));
+  } else {
+    tabURLMap = new Map();
+    storeTabURLMap();
+  }
+}
+
+/*
+Get data for tabURLMap from local storage
+*/
+function retrieveTabURLMap() {
+  browser.storage.local.get("tabURLMap").then(retrievedTabURLMap, onError);
+}
+
+function storeTabURLMap() {
+  browser.storage.local.set({
+    "tabURLMap": JSON.stringify(Array.from(tabURLMap.entries()))
+  }).then(savedSuccessfully, onSaveError);
+}
+
 /*
 Listen to when user adds or removes tabs.
 */
@@ -115,5 +139,10 @@ updateCount();
 
 // Receive initial value for maxTabs
 browser.storage.local.get("maxTabs").then(retrievedMaxTabs, onError);
+retrieveTabURLMap();
+// Load list of URLs that should have been loaded into a tab,
+// when MaxTabsOverlay was loaded instead, as too many tabs were open at the time.
+// browser.storage.local.get("tabURLMap").then(retrievedtabURLMap, onErrorRetrievingTabURLMap);
 // Listen to changes of the maxTabs value
 browser.storage.onChanged.addListener(retrieveMaxTabsValue);
+browser.storage.onChanged.addListener(retrieveTabURLMap);

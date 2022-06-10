@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Too Many Tabs</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+  <!-- <link rel="stylesheet" href="./overlay.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous"> -->
+  <style type="text/css" media="screen">
+    .vertical-center {
+        min-height: 100%; /* Fallback for browsers do NOT support vh unit */
+        min-height: 100vh; /* These two lines are counted as one :-)       */
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    /* .bg-info {
+      background-color: lightblue;
+    }
+    .bg-white {
+      background-color: white;
+    } */
+  </style>
+  <!--<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>-->
+
+  <!--<link rel="shortcut icon" href="icons/leechblock16.ico" type="image/x-icon">
+  <link rel="icon" href="icons/leechblock16.ico" type="image/x-icon">
+  <link rel="stylesheet" href="fonts.css" type="text/css">
+  <link rel="stylesheet" href="style.css" type="text/css">
+  <link id="themeLink" rel="stylesheet">-->
+</head>
+
+
+<body>
+  <div class="container-fluid vertical-center bg-info">
+  	<div class="row" style="width: 60%">
+  		<div class="col-md-12 rounded-lg px-4 py-2 bg-white">
+  			<h3>
+  				Open Tabs
+  			</h3>
+        <form method="POST">
+          <div class="form-row">
+            <div class="form-group col-md-12">
+              <select id="tabselect" class="form-control" multiple="multiple" size="6">
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <button type="button" class="btn btn-info btn-block" id="closeSelected" value="Close Selected Tabs">Close Selected Tabs</button>
+            </div>
+            <div class="form-group col-md-6">
+              <button type="button" class="btn btn-secondary btn-block" id="closeCurrent" value="Close Current Tab">Close Current Tab</button>
+            </div>
+          </div>
+
+          <!-- <input type="button" id="closeCurrent" value="Go To Selected Tab"> -->
+        </form>
+        <script src="overlay.js"></script>
+  	</div>
+  </div>
+</body>
+
+</html>
