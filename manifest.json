@@ -21,7 +21,7 @@
         "32": "tab.svg"
     }
   },
-  "version": "1.22",
+  "version": "1.23",
   "browser_specific_settings": {
     "gecko": {
       "strict_min_version": "57.0a1"
