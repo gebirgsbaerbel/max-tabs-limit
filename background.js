@@ -1,4 +1,5 @@
 var maxTabs;
+var enableNotif;
 
 /*
 Update the browser when the number of tabs changes.
@@ -27,7 +28,7 @@ function updateCount(tabId, isOnRemoved) {
     isBlockable = !isPreferencesWindow || isNewTabWindow;
     if (!isOnRemoved && length > maxTabs && isBlockable) {
       let content = `Max Tabs Limit: ${maxTabs}`;
-      browser.notifications.create({
+      enableNotif && browser.notifications.create({
         "type": "basic",
         "iconUrl": browser.runtime.getURL("icons/link-48.png"),
         "title": "Too many tabs opened",
@@ -79,15 +80,16 @@ function savedSuccessfully(e) {
 }
 
 /*
-Retrieved information of maxTabs setting from storage.
+Retrieved settings from storage.
 */
-function retrievedMaxTabs(value) {
+function retrievedSettings(value) {
   // If maxTabs value is set use it, otherwise use default value.
   if (value.maxTabs) {
     maxTabs = value.maxTabs;
   } else {
     setMaxTabsDefaultValue();
   }
+  enableNotif = !!value.enableNotif
 }
 
 function setMaxTabsDefaultValue() {
@@ -99,10 +101,10 @@ function setMaxTabsDefaultValue() {
 }
 
 /*
-Retrieve the value of maxTabs from storage and update the UI accordingly.
+Retrieve the value of settings from storage and update the UI accordingly.
 */
-function retrieveMaxTabsValue() {
-  browser.storage.local.get("maxTabs").then(retrievedMaxTabs, onError);
+function retrieveAndUpdateSettings() {
+  browser.storage.local.get(["maxTabs", "enableNotif"]).then(retrievedSettings, onError);
   browser.tabs.query({})
   .then((tabs) => {
     let length = tabs.length;
@@ -121,7 +123,7 @@ browser.tabs.onCreated.addListener(
 });
 updateCount();
 
-// Receive initial value for maxTabs
-browser.storage.local.get("maxTabs").then(retrievedMaxTabs, onError);
-// Listen to changes of the maxTabs value
-browser.storage.onChanged.addListener(retrieveMaxTabsValue);
+// Receive initial value for settings
+browser.storage.local.get(["maxTabs", "enableNotif"]).then(retrievedSettings, onError);
+// Listen to changes of the setting values
+browser.storage.onChanged.addListener(retrieveAndUpdateSettings);
