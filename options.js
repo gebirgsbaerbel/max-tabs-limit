@@ -1,8 +1,8 @@
 /**
- * Update the UI: set the value of the maxTabs textbox.
+ * Update the UI: set the value of preferences.
  */
 async function updateUI() {
-  browser.storage.local.get("maxTabs").then(updateMaxTabsText, onError);
+  browser.storage.local.get(["maxTabs", "enableNotif"]).then(updateInputFields, onError);
 }
 
 /**
@@ -14,7 +14,8 @@ function saveOptions(e) {
 
 function saveOptions() {
   browser.storage.local.set({
-    "maxTabs": document.querySelector("#maxTabs").value
+    "maxTabs": document.querySelector("#maxTabs").value,
+    "enableNotif": !!document.querySelector("#enableNotif").checked,
   }).then(savedSuccessfully, onError);
   e.preventDefault();
 }
@@ -34,9 +35,9 @@ function onError(e) {
 }
 
 /*
-  Set text of maxTabs textField to the current maxTabs value.
+  Set input fields to values in storage.
 */
-function updateMaxTabsText(e) {
+function updateInputFields(e) {
   if (e.maxTabs) {
     document.querySelector("#maxTabs").value = e.maxTabs;
   } else {
@@ -44,6 +45,9 @@ function updateMaxTabsText(e) {
     document.querySelector("#maxTabs").value = maxTabsDefault;
     saveOptions();
   }
+
+  let enableNotif = e.enableNotif === undefined ? true : !!e.enableNotif
+  document.querySelector("#enableNotif").checked = enableNotif
 }
 
 /**
